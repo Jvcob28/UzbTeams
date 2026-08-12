@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ARENA — Платформа футбольных турниров</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,11 +237,132 @@ td.pts{font-weight:800!important;color:var(--ink)!important;font-size:13px}.gd-p
 /* ---------- empty states / toast ---------- */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:74px 20px;color:var(--muted);gap:9px;background:#fff;border:1px dashed #d8d4dc;border-radius:11px}.empty-state .ball{display:none}.empty-state h2{font-family:var(--ff-display);letter-spacing:-.3px;font-size:17px;color:var(--ink);margin:0;font-weight:800}.empty-state>div:not(.ball){font-size:11px;max-width:420px;line-height:1.55}.menu-toggle{display:none;width:38px;height:38px;border-radius:8px;background:#fff;border:1px solid var(--border);color:var(--ink);align-items:center;justify-content:center;cursor:pointer;font-size:17px;margin:0}.toast-wrap{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:8px;z-index:200}.toast{background:#21172b;border:1px solid rgba(255,255,255,.08);color:#fff;padding:11px 14px;border-radius:8px;box-shadow:0 14px 34px rgba(29,19,38,.18);font-size:11px;font-weight:650;display:flex;align-items:center;gap:8px;animation:toastin .22s ease}.toast span{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:9px}@keyframes toastin{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 
-@media(max-width:1080px){.search-shell{display:none}.club-grid{grid-template-columns:1fr}.teams-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
-@media(max-width:880px){
-  .sidebar{position:fixed;left:-280px;z-index:90;transition:left .23s ease;box-shadow:18px 0 42px rgba(27,15,36,.22)}.sidebar.open{left:0}.main{width:100%}.global-header{padding:0 18px;height:64px}.menu-toggle{display:flex!important}.global-breadcrumb{display:none}.main-inner{padding:24px 16px 48px}.division-title{font-size:28px}.match-row{grid-template-columns:1fr;gap:8px;text-align:center}.match-team.home,.match-team.away{justify-content:center;text-align:center}.match-actions{justify-content:center}.match-date{order:-1}.score-box{max-width:150px;margin:auto}.field-row,.settings-grid{flex-direction:column;gap:0}.admin-copy{display:none}
+/* ================= RESPONSIVE ================= */
+
+/* touch & mobile hygiene, applies everywhere */
+button,.clickable,.icon-btn,.tab-btn,.division-item,.team-card,.match-row,.player-card{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.modal{max-height:90vh;overflow-y:auto}
+
+/* sidebar drawer backdrop (mobile) */
+.sidebar-backdrop{position:fixed;inset:0;background:rgba(20,12,28,.45);z-index:85;opacity:0;pointer-events:none;transition:opacity .22s ease}
+.sidebar-backdrop.show{opacity:1;pointer-events:auto}
+body.sidebar-open{overflow:hidden}
+
+/* safe-area padding for notched phones */
+.global-header{padding-left:max(34px,env(safe-area-inset-left));padding-right:max(34px,env(safe-area-inset-right))}
+.sidebar{padding-left:env(safe-area-inset-left)}
+.toast-wrap{padding-bottom:env(safe-area-inset-bottom)}
+
+/* ---- large desktop / laptop (≤1280px): tighten side padding ---- */
+@media(max-width:1280px){
+  .main-inner{padding:30px clamp(18px,2.6vw,38px) 56px}
 }
-@media(max-width:620px){.topbar{align-items:flex-start;flex-direction:column}.topbar-actions{width:100%}.topbar-actions .btn{flex:1}.tabs{gap:20px}.teams-grid{grid-template-columns:1fr}.stat-strip{grid-template-columns:repeat(3,1fr)}.club-hero{padding:20px}.club-hero .crest-xl,.club-hero .crest-xl-fallback{width:76px;height:76px}.history-left{gap:8px}.history-date{display:none}.history-teams{font-size:10.5px}.global-tools{margin-left:auto}}
+
+/* ---- small laptop / large tablet landscape (≤1080px) ---- */
+@media(max-width:1080px){
+  .search-shell{display:none}
+  .club-grid{grid-template-columns:1fr}
+  .teams-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+}
+
+/* ---- tablet / narrow laptop (≤940px): sidebar becomes an overlay drawer ---- */
+@media(max-width:940px){
+  .sidebar{position:fixed;top:0;left:-290px;width:280px;flex:0 0 280px;z-index:90;transition:left .23s ease;box-shadow:18px 0 42px rgba(27,15,36,.22)}
+  .sidebar.open{left:0}
+  .app{display:block}
+  .main{width:100%}
+  .global-header{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right));height:64px}
+  .menu-toggle{display:flex!important}
+  .global-breadcrumb{display:none}
+  .main-inner{padding:24px 16px 48px}
+  .division-title{font-size:28px}
+  .club-hero{padding:22px}
+}
+
+/* ---- large phone / small tablet portrait (≤880px) ---- */
+@media(max-width:880px){
+  .match-row{grid-template-columns:1fr;gap:8px;text-align:center}
+  .match-team.home,.match-team.away{justify-content:center;text-align:center}
+  .match-actions{justify-content:center}
+  .match-date{order:-1}
+  .score-box{max-width:150px;margin:auto}
+  .field-row,.settings-grid{flex-direction:column;gap:0}
+  .admin-copy{display:none}
+  .club-hero-actions{width:100%}
+  .club-hero-actions .btn{flex:1}
+}
+
+/* ---- phones (≤620px) ---- */
+@media(max-width:620px){
+  .topbar{align-items:flex-start;flex-direction:column}
+  .topbar-actions{width:100%}
+  .topbar-actions .btn{flex:1}
+  .tabs{gap:20px}
+  .teams-grid{grid-template-columns:1fr}
+  .stat-strip{grid-template-columns:repeat(3,1fr)}
+  .club-hero{padding:20px}
+  .club-hero .crest-xl,.club-hero .crest-xl-fallback{width:76px;height:76px}
+  .history-left{gap:8px}
+  .history-date{display:none}
+  .history-teams{font-size:10.5px}
+  .global-tools{margin-left:auto}
+  .squad-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  /* iOS Safari zooms the page on focus if inputs are smaller than 16px — override */
+  .field input[type=text],.field input[type=date],.field input[type=number],.field select{font-size:16px}
+  .score-entry input{font-size:18px}
+}
+
+/* ---- small phones (≤480px) ---- */
+@media(max-width:480px){
+  .brand{padding:0 16px;height:74px}
+  .brand-name{font-size:17px}
+  .modal{padding:18px;max-width:none;width:100%;border-radius:12px}
+  .modal h3{font-size:17px;margin-bottom:16px}
+  .division-title{font-size:23px}
+  .page-eyebrow{margin-bottom:6px}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .stat-box{padding:11px}
+  .club-hero-info h1{font-size:23px}
+  .club-meta-row{gap:10px;font-size:9.5px}
+  .section-header h3{font-size:16px}
+  .btn{font-size:11.5px;padding:0 12px}
+  .toast-wrap{left:12px;right:12px;bottom:16px}
+  .toast{width:100%}
+  .legend{gap:12px;font-size:9.5px}
+  .club-recent-item{font-size:9.5px;padding:10px 11px}
+}
+
+/* ---- very small phones (≤360px) ---- */
+@media(max-width:360px){
+  .main-inner{padding:18px 12px 40px}
+  .global-header{padding-left:14px;padding-right:14px}
+  .division-title{font-size:20px}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .squad-grid{grid-template-columns:1fr 1fr}
+  .modal{padding:16px}
+  .score-entry{gap:8px}
+  .score-entry input{width:52px;height:48px;font-size:16px}
+}
+
+/* ---- landscape phones: keep modals scrollable within a short viewport ---- */
+@media (max-height:480px) and (orientation:landscape){
+  .modal{max-height:85vh}
+  .brand{height:64px}
+  .sidebar-section-title{margin-top:4px}
+}
+
+/* ---- larger touch targets on touch devices, any screen size ---- */
+@media (pointer:coarse){
+  .icon-btn{width:36px;height:36px}
+  .tab-btn{padding-bottom:15px}
+  .division-item{padding:13px 11px}
+  .btn-sm{min-height:38px}
+}
+
+/* ---- ultra-wide monitors: keep content readable, don't over-stretch ---- */
+@media(min-width:1800px){
+  .main-inner>#content{max-width:1560px}
+}
 </style>
 </head>
 <body>
@@ -263,11 +384,12 @@ td.pts{font-weight:800!important;color:var(--ink)!important;font-size:13px}.gd-p
 
     <button class="btn btn-gold btn-block" onclick="openDivisionModal()">+ Новый дивизион</button>
   </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
 
   <main class="main">
     <header class="global-header">
       <div class="global-left">
-        <button class="menu-toggle" aria-label="Открыть меню" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <button class="menu-toggle" aria-label="Открыть меню" onclick="toggleSidebar()">☰</button>
         <div class="global-breadcrumb"><span>ARENA</span><span class="crumb-sep">/</span><strong>Competition Control</strong></div>
       </div>
       <div class="global-tools">
@@ -585,8 +707,19 @@ function renderSidebar(){
 function selectDivision(id){
   state.activeDivisionId = id;
   state.activeTab = 'standings';
-  document.getElementById('sidebar').classList.remove('open');
+  closeSidebar();
   renderAll();
+}
+function toggleSidebar(){
+  const opening = !document.getElementById('sidebar').classList.contains('open');
+  document.getElementById('sidebar').classList.toggle('open', opening);
+  document.getElementById('sidebarBackdrop').classList.toggle('show', opening);
+  document.body.classList.toggle('sidebar-open', opening);
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
+  document.body.classList.remove('sidebar-open');
 }
 function deleteDivision(id){
   const d = getDivision(id);
@@ -1071,8 +1204,8 @@ function renderArchivePanel(div){
         <span>Season ${escapeHtml(season.label)} <span class="arrow">›</span></span>
         <span class="champ-tag">${season.standings[0] ? escapeHtml(season.standings[0].name)+' · Champion' : ''}</span>
       </summary>
-      <div class="archive-body">
-        <table class="standings">
+      <div class="archive-body" style="overflow-x:auto">
+        <table class="standings" style="min-width:520px">
           <thead><tr><th>#</th><th>Команда</th><th class="num">И</th><th class="num">В</th><th class="num">Н</th><th class="num">П</th><th class="num">РМ</th><th class="num">О</th></tr></thead>
           <tbody>
             ${season.standings.map((r,i)=>`
